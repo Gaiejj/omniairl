@@ -13,7 +13,11 @@ The following libraries are required for installation:
 
 To install the dependencies, run:
 ```bash
+git clone https://github.com/Gaiejj/omniairl.git
+cd omniairl
 pip install -r requirements.txt
+cd examples
+python Q_Learning_K_Bandits.py
 ```
 
 ## Algorithms
