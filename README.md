@@ -21,7 +21,23 @@ pip install -r requirements.txt
 Currently, the following reinforcement learning algorithms have been implemented:
 
 - Tabular Q-Learning
+
+## Enviornment
+
 - K-Armed Bandit
+
+## Result
+
+
+| Fig1: Epoch Reward | Fig2: Rolling Average Reward (K=5) |
+|--------------------|-------------------------------------|
+| ![Epoch Reward](https://github.com/Gaiejj/omniairl/blob/main/images/Q_Learning_K_Bandits/window_0.png "Epoch Reward") | ![Rolling Average Reward (K=5)](https://github.com/Gaiejj/omniairl/blob/main/images/Q_Learning_K_Bandits/window_5.png "Rolling Average Reward (K=5)") |
+
+| Fig3: Rolling Average Reward (K=10) | Fig4: Rolling Average Reward (K=20) |
+|----------------------------------------|----------------------------------------|
+| ![Rolling Average Reward (K=10)](https://github.com/Gaiejj/omniairl/blob/main/images/Q_Learning_K_Bandits/window_10.png "Rolling Average Reward (K=10)") | ![Rolling Average Reward (K=20)](https://github.com/Gaiejj/omniairl/blob/main/images/Q_Learning_K_Bandits/window_20.png "Rolling Average Reward (K=20)") |
+
+
 
 ## Contributing
 
