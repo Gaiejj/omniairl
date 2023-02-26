@@ -13,7 +13,17 @@ class QLearningAgent:
         Q (numpy.ndarray): The Q-table.
     """
 
-    def __init__(self, n_states: int, n_actions: int, alpha: float = 0.5, gamma: float = 0.9, epsilon: float = 0.1, update_method: str='average', use_q_noise: bool=False) -> None:
+    def __init__(
+            self, 
+            n_states: int, 
+            n_actions: int, 
+            alpha: float = 0.5, 
+            gamma: float = 0.9, 
+            epsilon: float = 0.1, 
+            update_method: str='average', 
+            use_q_noise: bool=False,
+            epsilon_annealing: bool=False,
+            ) -> None:
         """
         Initializes the Q-Learning agent.
 
@@ -28,8 +38,8 @@ class QLearningAgent:
         self.n_actions = n_actions
         self.alpha = alpha
         self.gamma = gamma
-        self.epsilon = epsilon
-        self.init_epsilon = epsilon
+        self.epsilon = epsilon if not epsilon_annealing else 1.0
+        self.init_epsilon = 1.0
         self.Q = np.zeros((n_states, n_actions))
         self.update_method=update_method
         self.counts=0
@@ -47,7 +57,7 @@ class QLearningAgent:
         """
         # Add Gaussian noise to Q-table
         if self.use_q_noise:
-            self.Q += np.random.normal(0, 0.005, size=(self.n_states, self.n_actions))
+            self.Q += np.random.normal(0, 0.01, size=(self.n_states, self.n_actions))
         if np.random.random() < self.epsilon:
             # With probability epsilon, choose a random action
             return np.random.choice(self.n_actions)

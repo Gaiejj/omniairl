@@ -1,6 +1,6 @@
 default:
   num_arms: 10
-  max_steps: 20
+  max_steps: 10
   reward_mean: 0
   init_reward_std: 1.0
   action_reward_std: 1.0

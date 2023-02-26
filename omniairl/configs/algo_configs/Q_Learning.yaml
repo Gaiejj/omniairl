@@ -1,9 +1,10 @@
 K_Armed_Bandit:
   alpha: 0.001
   gamma: 0.99
-  epsilon: 1.0
-  use_q_noise: False
-  update_method: 'average'
+  epsilon: 0.15
+  use_q_noise: True
+  update_method: 'averagea'
+  epsilon_annealing: False
 
 
 default:

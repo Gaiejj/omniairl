@@ -48,7 +48,8 @@ class EnvWrapper:
             state = next_state
             
         episode_rewards.append(episode_reward)
-        print(f"Epoch {epoch+1}: reward={episode_reward}")
+        if epoch % 1000==0:
+            print(f"Epoch {epoch+1}: reward={episode_reward}")
         
         self.episode_rewards.extend(episode_rewards)
         return np.mean(episode_rewards)

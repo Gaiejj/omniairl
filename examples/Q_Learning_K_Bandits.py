@@ -26,7 +26,7 @@ algo_cfgs['n_actions'] = int(n_actions)
 agent = AlgoWrapper('Q_Learning', algo_cfgs=algo_cfgs)
 
 # Set number of epochs and initialize rewards list
-Epochs = 10000
+Epochs = 100000
 rewards = []
 
 # Run training loop for specified number of epochs
@@ -34,7 +34,8 @@ for epoch in range(Epochs):
     # Run an epoch of the environment with the agent and get the results
     res = env.run_epoch(agent=agent, epoch=epoch)
     # Update agent's epsilon value for epsilon-greedy exploration strategy
-    agent.agent.epsilon_annealing(epoch, Epochs/2)
+    if algo_cfgs.get('epsilon_annealing'):
+        agent.agent.epsilon_annealing(epoch, Epochs/2)
     # Append the result to rewards list
     rewards.append(res)
 
