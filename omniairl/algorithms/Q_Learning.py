@@ -29,6 +29,7 @@ class QLearningAgent:
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon = epsilon
+        self.init_epsilon = epsilon
         self.Q = np.zeros((n_states, n_actions))
 
     def choose_action(self, state: int) -> int:
@@ -59,15 +60,15 @@ class QLearningAgent:
             next_state (int): The next state.
         """
         # Calculate the TD error
-        td_error = reward + self.gamma * np.max(self.Q[next_state]) - self.Q[state, action]
+        td_error = reward
         # Update the Q-value for the current state and action
         self.Q[state, action] += self.alpha * td_error
 
-    def set_epsilon(self, epsilon: float) -> None:
+    def epsilon_annealing(self, epoch: int, end_epoch: int) -> None:
         """
         Sets the exploration rate to the given value.
 
         Args:
             epsilon (float): The exploration rate.
         """
-        self.epsilon = epsilon
+        self.epsilon = self.init_epsilon*min((1-epoch/end_epoch), 1)+0.1

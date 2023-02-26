@@ -25,14 +25,15 @@ class KArmedBandit:
         timestep: An integer specifying the current timestep.
     """
 
-    def __init__(self, num_arms: int, max_steps: int, reward_mean: float = 0.0, reward_std: float = 1.0) -> None:
+    def __init__(self, num_arms: int, max_steps: int, reward_mean: float = 0.0, init_reward_std: float = 1.0, action_reward_std: float=1.0) -> None:
         self.action_space = np.arange(num_arms)
         self.observation_space = np.arange(1)
         self.num_arms = num_arms
         self.max_steps = max_steps
         self.reward_mean = reward_mean
-        self.reward_std = reward_std
-        self.q_star = np.random.normal(loc=self.reward_mean, scale=self.reward_std, size=self.num_arms)
+        self.init_reward_std = init_reward_std
+        self.action_reward_std = action_reward_std
+        self.q_star = np.random.normal(loc=self.reward_mean, scale=self.init_reward_std, size=self.num_arms)
         self.timestep = 0
 
     def reset(self) -> tuple:
@@ -59,8 +60,7 @@ class KArmedBandit:
         """
         if action not in self.action_space:
             raise ValueError(f"Invalid action {action}")
-
-        reward = np.random.normal(loc=self.q_star[action], scale=self.reward_std)
+        reward = np.random.normal(loc=self.q_star[action], scale=self.action_reward_std)
         self.timestep += 1
 
         if self.timestep >= self.max_steps:
