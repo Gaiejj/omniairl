@@ -1,6 +1,6 @@
 # OmniAirl
 
-This is a trustworthy reinforcement learning library, currently maintained by Jiayi Zhou from Xi'an Jiaotong University. Contributions are welcome.
+This is a trustworthy reinforcement learning library only for XJTU IAIR homework, currently maintained by Jiayi Zhou from Xi'an Jiaotong University. Contributions are welcome.
 
 ![Logo](https://github.com/Gaiejj/omniairl/blob/main/images/logo.png)
 
