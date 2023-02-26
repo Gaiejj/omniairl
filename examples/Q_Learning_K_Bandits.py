@@ -1,5 +1,6 @@
 import os
 import sys
+from matplotlib import pyplot as plt
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from omniairl.utils.yaml_utils import get_default_yaml
 from omniairl.wrappers.algo_wrapper import AlgoWrapper
@@ -13,6 +14,14 @@ algo_cfgs['n_states']=int(n_states)
 algo_cfgs['n_actions']=int(n_actions)
 agent=AlgoWrapper('Q_Learning', algo_cfgs=algo_cfgs)
 Epochs=100
+reward=[]
 
 for epoch in range(Epochs):
-    env.run_epoch(agent=agent, epoch=epoch)
+    res=env.run_epoch(agent=agent, epoch=epoch)
+    reward.append(res)
+
+plt.plot(range(Epochs), reward)
+plt.xlabel('Episodes')
+plt.ylabel('Cumulative Reward')
+plt.title('Training Curve')
+plt.show()

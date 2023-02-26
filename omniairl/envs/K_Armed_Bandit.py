@@ -27,7 +27,7 @@ class KArmedBandit:
 
     def __init__(self, num_arms: int, max_steps: int, reward_mean: float = 0.0, reward_std: float = 1.0) -> None:
         self.action_space = np.arange(num_arms)
-        self.observation_space = np.arange(num_arms)
+        self.observation_space = np.arange(1)
         self.num_arms = num_arms
         self.max_steps = max_steps
         self.reward_mean = reward_mean
@@ -68,5 +68,5 @@ class KArmedBandit:
         else:
             terminal = False
 
-        return action, reward, terminal, False, {}
+        return 0, reward, terminal, False, {}
 
