@@ -1,0 +1,5 @@
+default:
+  num_arms: 10
+  max_steps: 1000
+  reward_mean: 0
+  reward_std: 1.0
