@@ -13,7 +13,7 @@ class QLearningAgent:
         Q (numpy.ndarray): The Q-table.
     """
 
-    def __init__(self, n_states: int, n_actions: int, alpha: float = 0.5, gamma: float = 0.9, epsilon: float = 0.1) -> None:
+    def __init__(self, n_states: int, n_actions: int, alpha: float = 0.5, gamma: float = 0.9, epsilon: float = 0.1, update_method: str='average', use_q_noise: bool=False) -> None:
         """
         Initializes the Q-Learning agent.
 
@@ -31,6 +31,9 @@ class QLearningAgent:
         self.epsilon = epsilon
         self.init_epsilon = epsilon
         self.Q = np.zeros((n_states, n_actions))
+        self.update_method=update_method
+        self.counts=0
+        self.use_q_noise=use_q_noise
 
     def choose_action(self, state: int) -> int:
         """
@@ -42,6 +45,9 @@ class QLearningAgent:
         Returns:
             int: The chosen action.
         """
+        # Add Gaussian noise to Q-table
+        if self.use_q_noise:
+            self.Q += np.random.normal(0, 0.005, size=(self.n_states, self.n_actions))
         if np.random.random() < self.epsilon:
             # With probability epsilon, choose a random action
             return np.random.choice(self.n_actions)
@@ -60,9 +66,14 @@ class QLearningAgent:
             next_state (int): The next state.
         """
         # Calculate the TD error
-        td_error = reward
+        self.counts+=1
         # Update the Q-value for the current state and action
-        self.Q[state, action] += self.alpha * td_error
+        if self.update_method=='average':
+            self.Q[state, action] += (reward-self.Q[state, action])/self.counts
+        elif self.update_method=='td':
+            self.Q[state, action] += self.alpha * (reward + self.gamma * np.max(self.Q[next_state]) - self.Q[state, action])
+        else: 
+            self.Q[state, action] += (reward-self.Q[state, action])*self.alpha
 
     def epsilon_annealing(self, epoch: int, end_epoch: int) -> None:
         """
