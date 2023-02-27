@@ -57,7 +57,7 @@ class QLearningAgent:
         """
         # Add Gaussian noise to Q-table
         if self.use_q_noise:
-            self.Q += np.random.normal(0, 0.01, size=(self.n_states, self.n_actions))
+            self.Q += np.random.normal(0, 0.001, size=(self.n_states, self.n_actions))
         if np.random.random() < self.epsilon:
             # With probability epsilon, choose a random action
             return np.random.choice(self.n_actions)
