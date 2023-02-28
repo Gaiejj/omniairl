@@ -44,7 +44,7 @@ class EnvWrapper:
             action = agent.choose_action(state)
             next_state, reward, done, truncated, _ = self.env.step(action)
             agent.update(state, action, reward, next_state)
-            episode_reward += reward
+            episode_reward += reward.mean() if isinstance(reward, np.ndarray) else reward
             state = next_state
             
         episode_rewards.append(episode_reward)

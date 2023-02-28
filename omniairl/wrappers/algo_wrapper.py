@@ -11,7 +11,6 @@ class AlgoWrapper:
     def __init__(self, algo, algo_cfgs=None):
         self.algo = algo
         self.evaluator = None
-        print(algo_registry.get(self.algo))
         self.agent=algo_registry.get(self.algo)(**algo_cfgs)
         self._init_checks()
 

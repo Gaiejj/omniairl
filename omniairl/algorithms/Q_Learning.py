@@ -23,6 +23,7 @@ class QLearningAgent:
             update_method: str='average', 
             use_q_noise: bool=False,
             epsilon_annealing: bool=False,
+            num_agents: int=1,
             ) -> None:
         """
         Initializes the Q-Learning agent.
@@ -36,13 +37,14 @@ class QLearningAgent:
         """
         self.n_states = n_states
         self.n_actions = n_actions
+        self.num_agents=num_agents
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon = epsilon if not epsilon_annealing else 1.0
         self.init_epsilon = 1.0
-        self.Q = np.zeros((n_states, n_actions))
+        self.Q = np.zeros(n_actions)
         self.update_method=update_method
-        self.counts=0
+        self.counts=np.zeros(n_actions)
         self.use_q_noise=use_q_noise
 
     def choose_action(self, state: int) -> int:
@@ -56,14 +58,12 @@ class QLearningAgent:
             int: The chosen action.
         """
         # Add Gaussian noise to Q-table
-        if self.use_q_noise:
-            self.Q += np.random.normal(0, 0.001, size=(self.n_states, self.n_actions))
         if np.random.random() < self.epsilon:
             # With probability epsilon, choose a random action
-            return np.random.choice(self.n_actions)
+            return np.random.randint(self.n_actions)
         else:
             # Otherwise, choose the action with the highest Q-value
-            return np.argmax(self.Q[state])
+            return np.argmax(self.Q)
 
     def update(self, state: int, action: int, reward: float, next_state: int) -> None:
         """
@@ -76,14 +76,14 @@ class QLearningAgent:
             next_state (int): The next state.
         """
         # Calculate the TD error
-        self.counts+=1
+        self.counts[action]+=1
         # Update the Q-value for the current state and action
         if self.update_method=='average':
-            self.Q[state, action] += (reward-self.Q[state, action])/self.counts
+            self.Q[action] += (reward-self.Q[action])/self.counts[action]
         elif self.update_method=='td':
-            self.Q[state, action] += self.alpha * (reward + self.gamma * np.max(self.Q[next_state]) - self.Q[state, action])
+            self.Q[action] += self.alpha * (reward + self.gamma * np.max(self.Q[next_state], axis=1) - self.Q[action])
         else: 
-            self.Q[state, action] += (reward-self.Q[state, action])*self.alpha
+            self.Q[action] += (reward-self.Q[action])*self.alpha
 
     def epsilon_annealing(self, epoch: int, end_epoch: int) -> None:
         """

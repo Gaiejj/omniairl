@@ -25,15 +25,17 @@ class KArmedBandit:
         timestep: An integer specifying the current timestep.
     """
 
-    def __init__(self, num_arms: int, max_steps: int, reward_mean: float = 0.0, init_reward_std: float = 1.0, action_reward_std: float=1.0) -> None:
+    def __init__(self, num_arms: int, max_steps: int, reward_mean: float = 0.0, init_reward_std: float = 1.0, action_reward_std: float=1.0, num_envs: int = 1, use_q_noise: bool=False) -> None:
         self.action_space = np.arange(num_arms)
         self.observation_space = np.arange(1)
         self.num_arms = num_arms
+        self.num_envs=num_envs
         self.max_steps = max_steps
         self.reward_mean = reward_mean
         self.init_reward_std = init_reward_std
         self.action_reward_std = action_reward_std
-        self.q_star = np.random.normal(loc=self.reward_mean, scale=self.init_reward_std, size=self.num_arms)
+        self.q_star = np.random.normal(loc=self.reward_mean, scale=self.init_reward_std, size=(self.num_envs, self.num_arms))
+        self.use_q_noise=use_q_noise
         self.timestep = 0
 
     def reset(self) -> tuple:
@@ -58,9 +60,13 @@ class KArmedBandit:
             over, a boolean indicating whether the episode was truncated, and an empty dictionary of additional
             information.
         """
-        if action not in self.action_space:
-            raise ValueError(f"Invalid action {action}")
-        reward = np.random.normal(loc=self.q_star[action], scale=self.action_reward_std)
+        #print(self.q_star[:, action].shape)
+        #print(self.q_star.shape)
+        dist=self.q_star
+        if self.use_q_noise:
+            dist=self.q_star + np.random.normal(loc=0.0, scale=0.01, size=self.q_star.shape)
+        reward =np.random.normal(loc=dist[:,action], scale=self.action_reward_std)
+        reward=np.expand_dims(reward, axis=1)
         self.timestep += 1
 
         if self.timestep >= self.max_steps:

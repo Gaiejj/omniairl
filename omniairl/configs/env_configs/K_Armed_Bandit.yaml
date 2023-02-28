@@ -1,6 +1,8 @@
 default:
+  num_envs: 1
   num_arms: 10
-  max_steps: 20
-  reward_mean: 0
+  max_steps: 1
+  reward_mean: 0.0
   init_reward_std: 1.0
   action_reward_std: 1.0
+  use_q_noise: True
